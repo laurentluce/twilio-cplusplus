@@ -101,6 +101,7 @@ string TwilioRest::Get(string url, Var vars[])
     curl_easy_setopt(curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
     curl_easy_setopt(curl, CURLOPT_USERPWD, sAuth.c_str());
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writer);
+    tbuffer = "";
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &tbuffer);
     res = curl_easy_perform(curl);
     curl_easy_cleanup(curl);
@@ -152,6 +153,7 @@ string TwilioRest::Post(string url, Var vars[])
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headerlist);
     curl_easy_setopt(curl, CURLOPT_HTTPPOST, formpost);
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writer);
+    tbuffer = "";
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &tbuffer);
     res = curl_easy_perform(curl);
     curl_easy_cleanup(curl);
