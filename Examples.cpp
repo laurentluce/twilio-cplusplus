@@ -16,8 +16,8 @@ int main () {
   const string API_VERSION = "2010-04-01";
   
   // Twilio AccountSid and AuthToken
-  const string ACCOUNT_SID = "ACa8e1bcd8948d695aa731bcc128b772dd";
-  const string ACCOUNT_TOKEN = "cd88c470c893f3db8d727f1eca6dba63";
+  const string ACCOUNT_SID = "xxx";
+  const string ACCOUNT_TOKEN = "xxx";
   
   // Outgoing Caller ID previously validated with Twilio
   const string CALLER_ID = "NNNNNNNNNN";
