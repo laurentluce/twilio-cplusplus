@@ -50,6 +50,13 @@ string TwilioRest::Request(string path, string method, Var vars[])
   return response;
 }
 
+/**
+ * Curl write function
+ * @param data data received from server
+ * @param size data size is size * nmemb
+ * @param nmemb data size is size * nmemb
+ * @param buffer
+ */
 static int writer(char *data, size_t size, size_t nmemb, string *buffer)
 {
   int result = 0;
