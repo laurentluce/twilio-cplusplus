@@ -1,0 +1,20 @@
+### C++ Twilio REST SDK
+
+### DESCRIPTION
+The Twilio REST SDK simplifies the process of makes calls to the Twilio REST.
+The Twilio REST API lets to you initiate outgoing calls, list previous call,
+and much more.  See http://www.twilio.com/docs for more information.
+
+### USAGE
+Include TwilioRest.h at the top of your C++ code and put the
+TwilioRest.h file in the same directory as your code. As shown in
+Examples.cpp, you will need to specify the ACCOUNT_ID and
+ACCOUNT_TOKEN given to you by Twilio before you can make REST requests.
+
+### FILES
+ * **TwilioRest.cpp**: build and link this library in your code
+ * **Examples.cpp**: examples of usage with TwilioRest client
+ * **Makefile**: makefile to build the library and example code (requires libcurl)
+
+### LICENSE
+The Twilio SDK is distributed under the MIT License
