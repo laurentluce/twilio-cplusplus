@@ -27,10 +27,10 @@ using namespace std;
  * @param vars URL attributes or POST attributes
  * @return HTTP response
  */
-string TwilioRest::request(string path, string method, vector<Var>& vars)
+string TwilioRest::request(const string& path, string method, vector<Var>& vars)
 {
   string response;
-    
+
   if (path.length() <= 0)
     throw "Path is empty";
     
@@ -123,7 +123,6 @@ string TwilioRest::get(string url, vector<Var>& vars)
     //url = curl_easy_escape(curl, url.c_str(), url.length());
     cout << url << endl;
     string sAuth = tid + ":" + ttoken;
-    cout << sAuth << endl;
     curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
     curl_easy_setopt(curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
     curl_easy_setopt(curl, CURLOPT_USERPWD, sAuth.c_str());
@@ -199,7 +198,7 @@ string TwilioRest::post(string url, vector<Var>& vars)
  * @param filename File to read data from
  * @return HTTP response
 */
-string TwilioRest::put(string url, string filename)
+string TwilioRest::put(string url, const string& filename)
 {
   CURL *curl;
   CURLcode res;
@@ -279,11 +278,11 @@ string TwilioRest::tdelete(string url)
  * @param path URL path
  * @return full URL
  */
-string TwilioRest::build_uri(string path)
+string TwilioRest::build_uri(const string& path)
 {
   if (path[0] == '/')
     return TWILIO_API_URL + path;
-        else
+  else
     return TWILIO_API_URL + "/" + path;
 }
  

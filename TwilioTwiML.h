@@ -17,7 +17,7 @@ class TwilioVerb {
      * @param tag TwiML tag
      * @param body TwiML tag body
      */
-    TwilioVerb(string tag, string body)
+    TwilioVerb(const string& tag, const string& body)
     {
        ttag = ttag;
        tbody = body;
@@ -60,13 +60,13 @@ class TwilioVerb {
       * Get verb body
       * @return verb body
     */
-    string getBody();
+    string& getBody();
 
     /**
       * Get verb tag
       * @return verb tag
     */
-    string getTag();
+    string& getTag();
     
     /**
       * Get verb children
@@ -85,6 +85,8 @@ class TwilioVerb {
       * @return verb xml
     */
     string toXML();
+
+    void replace(string& str, string& old, const string& res);
 
 };
 

@@ -36,7 +36,7 @@ TwilioVerb& TwilioVerb::append(TwilioVerb& verb)
   * Get verb body
   * @return verb body
 */
-string TwilioVerb::getBody()
+string& TwilioVerb::getBody()
 {
   return tbody;
 }
@@ -45,7 +45,7 @@ string TwilioVerb::getBody()
   * Get verb tag
   * @return verb tag
 */
-string TwilioVerb::getTag()
+string& TwilioVerb::getTag()
 {
   return ttag;
 }
@@ -92,6 +92,16 @@ string TwilioVerb::toXML()
   }
   
   return xml += "</" + ttag + ">";
+}
+
+void TwilioVerb::replace(string& str, string& old, const string& res)
+{
+  size_t pos = 0;
+  while((pos = str.find(old, pos)) != string::npos)
+  {
+    str.replace(pos, old.length(), res);
+    pos += res.length();
+  }
 }
 
 const string TwilioVerb::V_SAY = "Say";

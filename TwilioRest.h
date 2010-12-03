@@ -17,7 +17,7 @@ class TwilioRest {
      * @param id Twilio account SID
      * @param token Twilio account token
      */
-    TwilioRest(string id, string token)
+    TwilioRest(const string& id, const string& token)
     {
        tid = id;
        ttoken = token;
@@ -30,7 +30,7 @@ class TwilioRest {
      * @param vars URL attributes or POST attributes
      * @return HTTP response
      */
-    string request(string path, string method, vector<Var>& vars);
+    string request(const string& path, string method, vector<Var>& vars);
 
   private:
     /** Twilio account SID */
@@ -47,7 +47,7 @@ class TwilioRest {
      * @param path URL path
      * @return full URL
      */
-    string build_uri(string path);
+    string build_uri(const string& path);
     /**
      * HTTP GET request
      * @param url HTTP request URL
@@ -68,7 +68,7 @@ class TwilioRest {
      * @param filename File to read data from
      * @return HTTP response
     */
-    string put(string url, string filename);
+    string put(string url, const string& filename);
     /**
      * HTTP DELETE request
      * @param url HTTP request URL
