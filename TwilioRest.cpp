@@ -118,6 +118,7 @@ string TwilioRest::get(string url, vector<Var>& vars)
   CURL *curl;
   CURLcode res;
      
+  tbuffer = "HTTP get error";
   curl = curl_easy_init();
   if(curl) {
     //url = curl_easy_escape(curl, url.c_str(), url.length());
@@ -135,7 +136,7 @@ string TwilioRest::get(string url, vector<Var>& vars)
       return tbuffer;
   }
   
-  return "";
+  return tbuffer;
 }
 
 /**
@@ -166,6 +167,7 @@ string TwilioRest::post(string url, vector<Var>& vars)
                  CURLFORM_END);
   }
 
+  tbuffer = "HTTP post error";
   curl = curl_easy_init();
   headerlist = curl_slist_append(headerlist, buf);
 
@@ -189,7 +191,7 @@ string TwilioRest::post(string url, vector<Var>& vars)
       return tbuffer;
   }
   
-  return "";
+  return tbuffer;
 }
 
 /**
@@ -215,6 +217,7 @@ string TwilioRest::put(string url, const string& filename)
 
   curl_global_init(CURL_GLOBAL_ALL);
 
+  tbuffer = "HTTP put error";
   curl = curl_easy_init();
 
   if(curl) {
@@ -240,7 +243,7 @@ string TwilioRest::put(string url, const string& filename)
   }
   
   fclose(hd_src);
-  return "";
+  return tbuffer;
 }
 
 /**
@@ -253,6 +256,7 @@ string TwilioRest::tdelete(string url)
   CURL *curl;
   CURLcode res;
     
+  tbuffer = "HTTP delete error";
   curl = curl_easy_init();
   if(curl) {
     cout << url << endl;
@@ -270,7 +274,7 @@ string TwilioRest::tdelete(string url)
       return tbuffer;
   }
   
-  return "";
+  return tbuffer;
 }
 
 /**
