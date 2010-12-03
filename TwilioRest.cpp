@@ -6,6 +6,11 @@
 #include <iostream>
 #include <string>
 #include <algorithm>
+#include <vector>
+
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 #include <curl/curl.h>
 #include <curl/types.h>
@@ -22,7 +27,7 @@ using namespace std;
  * @param vars URL attributes or POST attributes
  * @return HTTP response
  */
-string TwilioRest::Request(string path, string method, Var vars[])
+string TwilioRest::request(string path, string method, vector<Var>& vars)
 {
   string response;
     
@@ -37,14 +42,22 @@ string TwilioRest::Request(string path, string method, Var vars[])
     throw "Invalid method parameter";
   }
     
-  string url = Build_uri(path);
+  string url = build_uri(path);
   if(method == "GET")
   {
-    response = Get(url, vars);
+    response = get(url, vars);
   }
   else if(method == "POST")
   {
-    response = Post(url, vars);
+    response = post(url, vars);
+  }
+  else if(method == "PUT")
+  {
+    response = put(url, vars[0].value);
+  }
+  else if(method == "DELETE")
+  {
+    response = tdelete(url);
   }
   
   return response;
@@ -69,20 +82,34 @@ static int writer(char *data, size_t size, size_t nmemb, string *buffer)
 }
 
 /**
+ * Curl read callback function
+ * @param ptr pointer to storage 
+ * @param size data size is size * nmemb
+ * @param nmemb data size is size * nmemb
+ * @param userdata read from stream
+ */
+static size_t read_callback(void *ptr, size_t size, size_t nmemb, void *stream)
+{
+  size_t retcode;
+     
+  retcode = fread((FILE*)ptr, size, nmemb, (FILE*)stream);
+         
+  return retcode;
+}
+
+/**
  * HTTP GET request
  * @param url HTTP request URL
  * @param vars URL attributes or POST attributes
  * @return HTTP response
  */
-string TwilioRest::Get(string url, Var vars[])
+string TwilioRest::get(string url, vector<Var>& vars)
 {
   string query = "";
   
-  int i = 0;
-  while(vars[i].key != "")
+  for(unsigned int i = 0; i < vars.size(); i++)
   {
     query += "&" + vars[i].key + "=" + vars[i].value;
-    i++;
   }
     
   if (query.length() > 0)
@@ -111,13 +138,14 @@ string TwilioRest::Get(string url, Var vars[])
   
   return "";
 }
+
 /**
  * HTTP POST request
  * @param url HTTP request URL
  * @param vars POST attributes
  * @return HTTP response
 */
-string TwilioRest::Post(string url, Var vars[])
+string TwilioRest::post(string url, vector<Var>& vars)
 {
   CURL *curl;
   CURLcode res;
@@ -130,15 +158,13 @@ string TwilioRest::Post(string url, Var vars[])
   curl_global_init(CURL_GLOBAL_ALL);
 
   // Post data
-  int i = 0;
-  while(vars[i].key != "")
+  for(unsigned int i = 0; i < vars.size(); i++)
   {
     curl_formadd(&formpost,
                  &lastptr,
                  CURLFORM_COPYNAME, vars[i].key.c_str(),
                  CURLFORM_COPYCONTENTS, vars[i].value.c_str(),
                  CURLFORM_END);
-    i++;
   }
 
   curl = curl_easy_init();
@@ -159,6 +185,88 @@ string TwilioRest::Post(string url, Var vars[])
     curl_easy_cleanup(curl);
     curl_formfree(formpost);
     curl_slist_free_all (headerlist);
+    curl_global_cleanup();
+    if (res == CURLE_OK)
+      return tbuffer;
+  }
+  
+  return "";
+}
+
+/**
+ * HTTP PUT request
+ * @param url HTTP request URL
+ * @param filename File to read data from
+ * @return HTTP response
+*/
+string TwilioRest::put(string url, string filename)
+{
+  CURL *curl;
+  CURLcode res;
+  FILE * hd_src ;
+  int hd ;
+  struct stat file_info;
+  char *file;
+  
+  // get local file size 
+  hd = open(file, O_RDONLY);
+  fstat(hd, &file_info);
+  close(hd);
+  hd_src = fopen(file, "rb");
+
+  curl_global_init(CURL_GLOBAL_ALL);
+
+  curl = curl_easy_init();
+
+  if(curl) {
+    cout << url << endl;
+    curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+    string sAuth = tid + ":" + ttoken;
+    curl_easy_setopt(curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+    curl_easy_setopt(curl, CURLOPT_USERPWD, sAuth.c_str());
+    curl_easy_setopt(curl, CURLOPT_READFUNCTION, read_callback);
+    curl_easy_setopt(curl, CURLOPT_UPLOAD, 1L);
+    curl_easy_setopt(curl, CURLOPT_READDATA, hd_src);
+    curl_easy_setopt(curl, CURLOPT_INFILESIZE_LARGE, 
+                      (curl_off_t)file_info.st_size);
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writer);
+    tbuffer = "";
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &tbuffer);
+    res = curl_easy_perform(curl);
+    curl_easy_cleanup(curl);
+    curl_global_cleanup();
+    fclose(hd_src);
+    if (res == CURLE_OK)
+      return tbuffer;
+  }
+  
+  fclose(hd_src);
+  return "";
+}
+
+/**
+ * HTTP DELETE request
+ * @param url HTTP request URL
+ * @return HTTP response
+*/
+string TwilioRest::tdelete(string url)
+{
+  CURL *curl;
+  CURLcode res;
+    
+  curl = curl_easy_init();
+  if(curl) {
+    cout << url << endl;
+    curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+    curl_easy_setopt(curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+    string sAuth = tid + ":" + ttoken;
+    curl_easy_setopt(curl, CURLOPT_USERPWD, sAuth.c_str());
+    curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "DELETE");
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writer);
+    tbuffer = "";
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &tbuffer);
+    res = curl_easy_perform(curl);
+    curl_easy_cleanup(curl);
     if (res == CURLE_OK)
       return tbuffer;
   }
@@ -171,7 +279,7 @@ string TwilioRest::Post(string url, Var vars[])
  * @param path URL path
  * @return full URL
  */
-string TwilioRest::Build_uri(string path)
+string TwilioRest::build_uri(string path)
 {
   if (path[0] == '/')
     return TWILIO_API_URL + path;

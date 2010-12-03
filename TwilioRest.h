@@ -30,7 +30,7 @@ class TwilioRest {
      * @param vars URL attributes or POST attributes
      * @return HTTP response
      */
-    string Request(string path, string method, Var vars[]);
+    string request(string path, string method, vector<Var>& vars);
 
   private:
     /** Twilio account SID */
@@ -47,21 +47,35 @@ class TwilioRest {
      * @param path URL path
      * @return full URL
      */
-    string Build_uri(string path);
+    string build_uri(string path);
     /**
      * HTTP GET request
      * @param url HTTP request URL
      * @param vars URL attributes
      * @return HTTP response
      */
-    string Get(string url, Var vars[]);
+    string get(string url, vector<Var>& vars);
     /**
      * HTTP POST request
      * @param url HTTP request URL
      * @param vars POST attributes
      * @return HTTP response
      */
-    string Post(string url, Var vars[]);
+    string post(string url, vector<Var>& vars);
+    /**
+     * HTTP PUT request
+     * @param url HTTP request URL
+     * @param filename File to read data from
+     * @return HTTP response
+    */
+    string put(string url, string filename);
+    /**
+     * HTTP DELETE request
+     * @param url HTTP request URL
+     * @return HTTP response
+    */
+    string tdelete(string url);
+
 };
 
 #endif
