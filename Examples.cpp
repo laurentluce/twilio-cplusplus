@@ -10,6 +10,7 @@
 using namespace std;
 
 #include "TwilioRest.h"
+#include "TwilioTwiML.h"
 
 int main () {
 
@@ -25,12 +26,13 @@ int main () {
 
   string response;
 
-  TwilioRest t (ACCOUNT_SID, ACCOUNT_TOKEN);
   vector<Var> vars;
   Var var;
 
   try {
     
+    TwilioRest t (ACCOUNT_SID, ACCOUNT_TOKEN);
+
     // get completed calls XML
     vars.clear();
     var.key = "Status";
@@ -52,6 +54,16 @@ int main () {
     vars.push_back(var);
     response = t.request("/" + API_VERSION + "/Accounts/" + ACCOUNT_SID + "/SMS/Messages", "POST", vars);
     cout << response << endl;
+
+    // TwiML
+
+    // Say, Dial and Play
+    TwiMLResponse response;
+    Say say ("Hello, how are you?");
+    say.setLoop(5);
+    say.setVoice("woman");
+    response.append(say);
+    cout << response.toXML() << endl;
 
   }
   catch(char const* str) {
