@@ -54,7 +54,7 @@ class TwilioVerb {
      * @param verb Twilio verb
      * @return verb
      */
-    TwilioVerb append(TwilioVerb verb);
+    TwilioVerb& append(TwilioVerb& verb);
     
     /**
       * Get verb body
@@ -72,13 +72,13 @@ class TwilioVerb {
       * Get verb children
       * @return vector of verbs
     */
-    vector<TwilioVerb> getChildren();
+    vector<TwilioVerb>& getChildren();
 
     /**
       * Get verb attributes
       * @return vector of attributes
     */
-    vector<Var> getAttributes();
+    vector<Var>& getAttributes();
     
     /**
       * Return verb xml based on tag, body, attributes and its children

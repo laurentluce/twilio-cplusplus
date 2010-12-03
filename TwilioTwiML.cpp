@@ -17,7 +17,7 @@ using namespace std;
   * @param verb Twilio verb
   * @return verb
 */
-TwilioVerb TwilioVerb::append(TwilioVerb verb)
+TwilioVerb& TwilioVerb::append(TwilioVerb& verb)
 {
   vector<string>::iterator result;
   result = find(allowedVerbs.begin(), allowedVerbs.end(), verb.getTag());
@@ -54,7 +54,7 @@ string TwilioVerb::getTag()
   * Get verb children
   * @return vector of verbs
 */
-vector<TwilioVerb> TwilioVerb::getChildren()
+vector<TwilioVerb>& TwilioVerb::getChildren()
 {
   return children;
 }
@@ -63,7 +63,7 @@ vector<TwilioVerb> TwilioVerb::getChildren()
   * Get verb attributes
   * @return vector of attributes
 */
-vector<Var> TwilioVerb::getAttributes()
+vector<Var>& TwilioVerb::getAttributes()
 {
   return attributes;
 }
