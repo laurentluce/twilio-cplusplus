@@ -122,7 +122,6 @@ string TwilioRest::get(string url, vector<Var>& vars)
   curl = curl_easy_init();
   if(curl) {
     //url = curl_easy_escape(curl, url.c_str(), url.length());
-    cout << url << endl;
     string sAuth = tid + ":" + ttoken;
     curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
     curl_easy_setopt(curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
@@ -172,7 +171,6 @@ string TwilioRest::post(string url, vector<Var>& vars)
   headerlist = curl_slist_append(headerlist, buf);
 
   if(curl) {
-    cout << url << endl;
     curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
     string sAuth = tid + ":" + ttoken;
     curl_easy_setopt(curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
@@ -221,7 +219,6 @@ string TwilioRest::put(string url, const string& filename)
   curl = curl_easy_init();
 
   if(curl) {
-    cout << url << endl;
     curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
     string sAuth = tid + ":" + ttoken;
     curl_easy_setopt(curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
@@ -259,7 +256,6 @@ string TwilioRest::tdelete(string url)
   tbuffer = "HTTP delete error";
   curl = curl_easy_init();
   if(curl) {
-    cout << url << endl;
     curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
     curl_easy_setopt(curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
     string sAuth = tid + ":" + ttoken;

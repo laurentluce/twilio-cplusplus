@@ -29,8 +29,22 @@ class TwilioTestSuite : public CxxTest::TestSuite
         var.value = "completed";
         vars.push_back(var);
         response = t.request("/" + API_VERSION + "/Accounts/" + ACCOUNT_SID + "/Calls", "GET", vars);
-        TS_ASSERT(true);
-        
+        TS_ASSERT(response.find("RestException") == string::npos);
+       
+        // make a call
+        vars.clear();
+        var.key = "To";
+        var.value = "xxx-xxx-xxxx";
+        vars.push_back(var);
+        var.key = "From";
+        var.value = "xxx-xxx-xxxx";
+        vars.push_back(var);
+        var.key = "Url";
+        var.value = "http://xxxx";
+        vars.push_back(var);
+        response = t.request("/" + API_VERSION + "/Accounts/" + ACCOUNT_SID + "/Calls", "POST", vars);
+        TS_ASSERT(response.find("RestException") == string::npos);
+ 
         // send SMS
         vars.clear();
         var.key = "To";
@@ -43,7 +57,7 @@ class TwilioTestSuite : public CxxTest::TestSuite
         var.value = "Hello, how are you?";
         vars.push_back(var);
         response = t.request("/" + API_VERSION + "/Accounts/" + ACCOUNT_SID + "/SMS/Messages", "POST", vars);
-        TS_ASSERT(true);
+        TS_ASSERT(response.find("RestException") == string::npos);
       }
 
       void testTwiML(void)
@@ -55,6 +69,17 @@ class TwilioTestSuite : public CxxTest::TestSuite
         say.setVoice("woman");
         response.append(say);
         TS_ASSERT(response.toXML() == "<Response><Say loop=\"5\" voice=\"woman\"><![CDATA[Hello, how are you?]]></Say></Response>");
+        
+        // Gather, redirect
+        TwiMLResponse response2;
+        Gather gather;
+        gather.setNumDigits(10);
+        Say say2 ("Press 1");
+        Redirect redirect;
+        gather.append(say2);
+        response2.append(gather);
+        response2.append(redirect);
+        TS_ASSERT(response2.toXML() == "<Response><Gather numDigits=\"10\"><Say><![CDATA[Press 1]]></Say></Gather><Redirect></Redirect></Response>");
       } 
 
     private:

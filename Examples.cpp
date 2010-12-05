@@ -30,7 +30,8 @@ int main () {
   Var var;
 
   try {
-    
+   
+    // Twilio REST 
     TwilioRest t (ACCOUNT_SID, ACCOUNT_TOKEN);
 
     // get completed calls XML
@@ -39,6 +40,20 @@ int main () {
     var.value = "completed";
     vars.push_back(var);
     response = t.request("/" + API_VERSION + "/Accounts/" + ACCOUNT_SID + "/Calls", "GET", vars);
+    cout << response << endl;
+
+    // make a call
+    vars.clear();
+    var.key = "To";
+    var.value = "xxx-xxx-xxxx";
+    vars.push_back(var);
+    var.key = "From";
+    var.value = "xxx-xxx-xxxx";
+    vars.push_back(var);
+    var.key = "Url";
+    var.value = "http://xxxx";
+    vars.push_back(var);
+    response = t.request("/" + API_VERSION + "/Accounts/" + ACCOUNT_SID + "/Calls", "POST", vars);
     cout << response << endl;
 
     // send SMS
@@ -55,7 +70,7 @@ int main () {
     response = t.request("/" + API_VERSION + "/Accounts/" + ACCOUNT_SID + "/SMS/Messages", "POST", vars);
     cout << response << endl;
 
-    // TwiML
+    // TwiML reponse
 
     // Say, Dial and Play
     TwiMLResponse response;
@@ -64,6 +79,17 @@ int main () {
     say.setVoice("woman");
     response.append(say);
     cout << response.toXML() << endl;
+
+    // Gather, redirect
+    TwiMLResponse response2;
+    Gather gather;
+    gather.setNumDigits(10);
+    Say say2 ("Press 1");
+    Redirect redirect;
+    gather.append(say2);
+    response2.append(gather);
+    response2.append(redirect);
+    cout << response2.toXML() << endl;
 
   }
   catch(char const* str) {
