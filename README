@@ -14,10 +14,11 @@ As shown in Examples.cpp, you will need to specify the ACCOUNT_ID and
 ACCOUNT_TOKEN given to you by Twilio before you can make REST requests.
 
 ### FILES
- * **TwilioRest.cpp**: REST helper
- * **TwilioTwiML.cpp**: TwiML generation helper
- * **Examples.cpp**: examples of usage 
- * **Makefile**: makefile to build the library and examples code (requires libcurl)
+ * TwilioRest.cpp: REST wrapper
+ * TwilioTwiML.cpp: TwiML generation helper
+ * Examples.cpp: examples of usage 
+ * UnitTests.h: unit tests 
+ * Makefile: makefile to build the library, examples code and unit tests suite (requires libcurl). Type 'make' to build the library and the examples. Type 'make unittests' to build the unit tests suite and run it.
 
 ### LICENSE
 The Twilio SDK is distributed under the MIT License.
