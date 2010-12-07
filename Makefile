@@ -1,13 +1,19 @@
-all: twilio
+all: lib
  
-twilio: TwilioRest.o TwilioTwiML.o Examples.o
-	g++ -o twilio TwilioRest.o Examples.o TwilioTwiML.o -lcurl 
+examples: Rest.o TwiML.o Examples.o Utils.o
+	g++ -o examples Rest.o TwiML.o Utils.o Examples.o -lcurl 
 
-TwilioRest.o: TwilioRest.cpp
-	      g++ -Wall -c -o TwilioRest.o TwilioRest.cpp
+lib: Rest.o TwiML.o Utils.o
+	ar rcs twilio-cplusplus.a Rest.o TwiML.o Utils.o
 
-TwilioTwiML.o: TwilioTwiML.cpp
-	      g++ -Wall -c -o TwilioTwiML.o TwilioTwiML.cpp
+Rest.o: Rest.cpp
+	      g++ -Wall -c -o Rest.o Rest.cpp
+
+TwiML.o: TwiML.cpp
+	      g++ -Wall -c -o TwiML.o TwiML.cpp
+
+Utils.o: Utils.cpp
+	      g++ -Wall -c -o Utils.o Utils.cpp
 
 Examples.o: Examples.cpp
 	      g++ -Wall -c -o Examples.o Examples.cpp
@@ -16,7 +22,7 @@ unittests: runner
 	./runner
 
 runner: runner.cpp
-	g++ -Wall -I./ -o $@ TwilioRest.o TwilioTwiML.o -lcurl $^
+	g++ -Wall -I./ -o $@ Rest.o TwiML.o Utils.o -lcurl $^
 
 runner.cpp: UnitTests.h
 	./cxxtestgen.py -o $@ --error-printer $^

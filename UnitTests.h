@@ -10,8 +10,10 @@
 using namespace std;
 
 #include "cxxtest/TestSuite.h"
-#include "TwilioRest.h"
-#include "TwilioTwiML.h"
+#include "Rest.h"
+#include "TwiML.h"
+
+using namespace twilio;
 
 class TwilioTestSuite : public CxxTest::TestSuite
 {
@@ -21,7 +23,7 @@ class TwilioTestSuite : public CxxTest::TestSuite
         string response;
         vector<Var> vars;
         Var var;
-        TwilioRest t (ACCOUNT_SID, ACCOUNT_TOKEN);
+        Rest t (ACCOUNT_SID, ACCOUNT_TOKEN);
 
         // completed calls
         vars.clear();

@@ -9,8 +9,10 @@
 
 using namespace std;
 
-#include "TwilioRest.h"
-#include "TwilioTwiML.h"
+#include "Rest.h"
+#include "TwiML.h"
+
+using namespace twilio;
 
 int main () {
 
@@ -32,7 +34,7 @@ int main () {
   try {
    
     // Twilio REST 
-    TwilioRest t (ACCOUNT_SID, ACCOUNT_TOKEN);
+    Rest t (ACCOUNT_SID, ACCOUNT_TOKEN);
 
     // get completed calls XML
     vars.clear();
