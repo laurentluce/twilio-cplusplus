@@ -18,7 +18,8 @@
 
 using namespace std;
 
-#include "TwilioRest.h"
+#include "Rest.h"
+using namespace twilio;
 
 /**
  * HTTP request
@@ -27,7 +28,7 @@ using namespace std;
  * @param vars URL attributes or POST attributes
  * @return HTTP response
  */
-string TwilioRest::request(const string& path, string method, vector<Var>& vars)
+string Rest::request(const string& path, string method, vector<Var>& vars)
 {
   string response;
 
@@ -103,7 +104,7 @@ static size_t read_callback(void *ptr, size_t size, size_t nmemb, void *stream)
  * @param vars URL attributes or POST attributes
  * @return HTTP response
  */
-string TwilioRest::get(string url, vector<Var>& vars)
+string Rest::get(string url, vector<Var>& vars)
 {
   string query = "";
   
@@ -144,7 +145,7 @@ string TwilioRest::get(string url, vector<Var>& vars)
  * @param vars POST attributes
  * @return HTTP response
 */
-string TwilioRest::post(string url, vector<Var>& vars)
+string Rest::post(string url, vector<Var>& vars)
 {
   CURL *curl;
   CURLcode res;
@@ -198,7 +199,7 @@ string TwilioRest::post(string url, vector<Var>& vars)
  * @param filename File to read data from
  * @return HTTP response
 */
-string TwilioRest::put(string url, const string& filename)
+string Rest::put(string url, const string& filename)
 {
   CURL *curl;
   CURLcode res;
@@ -248,7 +249,7 @@ string TwilioRest::put(string url, const string& filename)
  * @param url HTTP request URL
  * @return HTTP response
 */
-string TwilioRest::tdelete(string url)
+string Rest::tdelete(string url)
 {
   CURL *curl;
   CURLcode res;
@@ -278,7 +279,7 @@ string TwilioRest::tdelete(string url)
  * @param path URL path
  * @return full URL
  */
-string TwilioRest::build_uri(const string& path)
+string Rest::build_uri(const string& path)
 {
   if (path[0] == '/')
     return TWILIO_API_URL + path;
@@ -286,6 +287,6 @@ string TwilioRest::build_uri(const string& path)
     return TWILIO_API_URL + "/" + path;
 }
  
-const string TwilioRest::TWILIO_API_URL = "https://api.twilio.com";
+const string Rest::TWILIO_API_URL = "https://api.twilio.com";
 
 
