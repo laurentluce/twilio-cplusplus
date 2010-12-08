@@ -10,6 +10,7 @@
 using namespace std;
 
 #include "cxxtest/TestSuite.h"
+#include "Utils.h"
 #include "Rest.h"
 #include "TwiML.h"
 
@@ -82,6 +83,22 @@ class TwilioTestSuite : public CxxTest::TestSuite
         response2.append(gather);
         response2.append(redirect);
         TS_ASSERT(response2.toXML() == "<Response><Gather numDigits=\"10\"><Say><![CDATA[Press 1]]></Say></Gather><Redirect></Redirect></Response>");
+      }
+
+      void testUtils(void)
+      {
+        vector<Var> vars;
+        Var var;
+
+        // Twilio Utils
+        Utils u (ACCOUNT_SID, ACCOUNT_TOKEN);
+
+        // validate request signature
+        vars.clear();
+        var.key = "Status";
+        var.value = "completed";
+        vars.push_back(var);
+        TS_ASSERT(u.validateRequest("mGgsPkY=", "/" + API_VERSION + "/Accounts/" + ACCOUNT_SID + "/Calls", vars));
       } 
 
     private:

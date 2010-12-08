@@ -97,7 +97,7 @@ int main () {
     // Twilio Utils
     Utils u (ACCOUNT_SID, ACCOUNT_TOKEN);
 
-    // get completed calls XML
+    // validate request signature 
     vars.clear();
     var.key = "Status";
     var.value = "completed";
