@@ -18,6 +18,7 @@
 
 using namespace std;
 
+#include "Utils.h"
 #include "Rest.h"
 using namespace twilio;
 

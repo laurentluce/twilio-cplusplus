@@ -8,15 +8,33 @@
 
 namespace twilio
 {
+  /** struct to contain the key and value for URL attributes or Body data */
+  struct Var { string key; string value; };
+  typedef struct Var Var;
+
   class Utils {
     public:
       /**
        * Constructor
        */
-      Utils()
+      Utils(const string& id, const string& token)
       {
+         tid = id;
+         ttoken = token;
       }
-     
+      /**
+        * Check if expectedSignature matches url + params base64 encoded hash
+        * @param expectedSignature signature to compare to 
+        * @param url URL to build hash on
+        * @param params POST params
+      */
+      bool validateRequest(const string& expectedSignature, const string& url, vector<Var>& params);
+
+    private:
+      /** Twilio account SID */
+      string tid;
+      /** Twilio account token */
+      string ttoken;
   };
 
   /**
@@ -33,6 +51,15 @@ namespace twilio
    * @return string
   */
   string intToStr(int i);
+  
+  /**
+   * '<' operator to compare 2 Var structure based on their key string
+   * @param a Var 1
+   * @param b Var 1
+   * @return < result
+  */
+  bool operator<(const Var& a, const Var& b);
+
 }
 
 #endif

@@ -8,10 +8,6 @@
 
 namespace twilio {
 
-  /** struct to contain the key and value for URL attributes or Body data */
-  struct Var { string key; string value; };
-  typedef struct Var Var;
-
   class Rest {
     public:
       /**

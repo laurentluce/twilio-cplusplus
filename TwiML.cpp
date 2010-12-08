@@ -11,9 +11,9 @@
 
 using namespace std;
 
+#include "Utils.h"
 #include "Rest.h"
 #include "TwiML.h"
-#include "Utils.h"
 
 using namespace twilio;
 

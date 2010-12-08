@@ -9,6 +9,7 @@
 
 using namespace std;
 
+#include "Utils.h"
 #include "Rest.h"
 #include "TwiML.h"
 
@@ -92,6 +93,17 @@ int main () {
     response2.append(gather);
     response2.append(redirect);
     cout << response2.toXML() << endl;
+
+    // Twilio Utils
+    Utils u (ACCOUNT_SID, ACCOUNT_TOKEN);
+
+    // get completed calls XML
+    vars.clear();
+    var.key = "Status";
+    var.value = "completed";
+    vars.push_back(var);
+    bool v = u.validateRequest("XXX", "/" + API_VERSION + "/Accounts/" + ACCOUNT_SID + "/Calls", vars);
+    cout << "request valid:" << v << endl;
 
   }
   catch(char const* str) {
