@@ -98,7 +98,7 @@ class TwilioTestSuite : public CxxTest::TestSuite
         var.key = "Status";
         var.value = "completed";
         vars.push_back(var);
-        TS_ASSERT(u.validateRequest("mGgsPkY=", "/" + API_VERSION + "/Accounts/" + ACCOUNT_SID + "/Calls", vars));
+        TS_ASSERT(u.validateRequest("mGgsPkZZfTGohCMY6yey2aWAAuU=", "/" + API_VERSION + "/Accounts/" + ACCOUNT_SID + "/Calls", vars));
       } 
 
     private:

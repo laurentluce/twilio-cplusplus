@@ -59,6 +59,14 @@ namespace twilio
    * @return < result
   */
   bool operator<(const Var& a, const Var& b);
+  
+  /**
+   * base64 encoding of input
+   * @param input string to encode
+   * @param length of string
+   * @return encoded string
+  */
+  char *base64(const unsigned char *input, int length);
 
 }
 

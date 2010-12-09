@@ -13,7 +13,7 @@ TwiML.o: TwiML.cpp
 	      g++ -Wall -c -o TwiML.o TwiML.cpp
 
 Utils.o: Utils.cpp
-	      g++ -Wall -c -o Utils.o Utils.cpp
+	      g++ -c -o Utils.o Utils.cpp
 
 Examples.o: Examples.cpp
 	      g++ -Wall -c -o Examples.o Examples.cpp

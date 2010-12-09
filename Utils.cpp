@@ -9,12 +9,17 @@
 #include <algorithm>
 #include <sstream>
 
+#include <openssl/hmac.h>
+#include <openssl/evp.h>
+#include <openssl/bio.h>
+#include <openssl/buffer.h>
+#include <openssl/sha.h>
+#include <string.h>
+
 using namespace std;
 
 #include "Utils.h"
 #include "Rest.h"
-#include "crypto/HMAC_SHA1.h"
-#include "crypto/Base64.h"
 
 namespace twilio {
   /**
@@ -30,22 +35,22 @@ namespace twilio {
     // sort params alphabetically
     sort(params.begin(), params.end());
   
-    // add params to url  
+    // add params to url
     for(unsigned int i = 0; i < params.size(); i++)
     {
       u += params[i].key + params[i].value;
     }
 
+    // HMAC SHA1 + base64 encoding
     unsigned int len = ttoken.length();
-    CHMAC_SHA1 HMAC_SHA1;
-    BYTE* digest = new BYTE[20];
-    HMAC_SHA1.HMAC_SHA1((BYTE*)(u.c_str()), u.length(), (BYTE*)(ttoken.c_str()), len, digest);
-    
-    string digest_enc;
-    digest_enc = base64_encode(digest, len);
-    cout << expectedSignature.c_str() << endl;
-    cout << digest_enc << endl;
-    if(memcmp(expectedSignature.c_str(), digest_enc.c_str(), len) == 0)
+    unsigned char md[20];
+    unsigned int md_len;
+    HMAC(EVP_sha1(), ttoken.c_str(), (int)len, (unsigned char*)(u.c_str()), u.length(), md, &md_len);
+    char* digest_enc;
+    digest_enc = base64((unsigned char*)md, (int)md_len);
+
+    // compare hash/encoded string with the expected string
+    if(memcmp(expectedSignature.c_str(), digest_enc, strlen(digest_enc)) == 0)
       return true;
     else
       return false;
@@ -96,6 +101,32 @@ namespace twilio {
         return a.key < b.key;
   }
 
+  /**
+   * base64 encoding of input
+   * @param input string to encode
+   * @param length of string
+   * @return encoded string
+  */
+  char *base64(const unsigned char *input, int length)
+  {
+    BIO *bmem, *b64;
+    BUF_MEM *bptr;
+
+    b64 = BIO_new(BIO_f_base64());
+    bmem = BIO_new(BIO_s_mem());
+    b64 = BIO_push(b64, bmem);
+    BIO_write(b64, input, length);
+    BIO_flush(b64);
+    BIO_get_mem_ptr(b64, &bptr);
+
+    char *buff = (char *)malloc(bptr->length);
+    memcpy(buff, bptr->data, bptr->length-1);
+    buff[bptr->length-1] = 0;
+
+    BIO_free_all(b64);
+
+    return buff;
+  }
 }
 
 

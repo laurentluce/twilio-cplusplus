@@ -102,7 +102,7 @@ int main () {
     var.key = "Status";
     var.value = "completed";
     vars.push_back(var);
-    bool v = u.validateRequest("XXX", "/" + API_VERSION + "/Accounts/" + ACCOUNT_SID + "/Calls", vars);
+    bool v = u.validateRequest("mGgsPkZZfTGohCMY6yey2aWAAuU=", "/" + API_VERSION + "/Accounts/" + ACCOUNT_SID + "/Calls", vars);
     cout << "request valid:" << v << endl;
 
   }
