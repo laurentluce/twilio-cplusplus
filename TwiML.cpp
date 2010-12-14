@@ -113,10 +113,7 @@ void Verb::set(const string& key, const string& value)
     }
   }
 
-  Var var;
-  var.key = key;
-  var.value = value;
-  attributes.push_back(var);
+  attributes.push_back(Var(key, value));
 }
 
 /**

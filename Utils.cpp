@@ -48,6 +48,7 @@ namespace twilio {
     HMAC(EVP_sha1(), ttoken.c_str(), (int)len, (unsigned char*)(u.c_str()), u.length(), md, &md_len);
     char* digest_enc;
     digest_enc = base64((unsigned char*)md, (int)md_len);
+    cout << digest_enc << endl;
 
     // compare hash/encoded string with the expected string
     if(memcmp(expectedSignature.c_str(), digest_enc, strlen(digest_enc)) == 0)
@@ -94,7 +95,7 @@ namespace twilio {
   /**
    * '<' operator to compare 2 Var structure based on their key string
    * @param a Var 1
-   * @param b Var 1
+   * @param b Var 2
    * @return < result
   */
   bool operator<(const Var& a, const Var& b) {

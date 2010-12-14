@@ -9,7 +9,15 @@
 namespace twilio
 {
   /** struct to contain the key and value for URL attributes or Body data */
-  struct Var { string key; string value; };
+  struct Var
+  { string key;
+    string value;
+    Var(const string& k, const string& v)
+    {
+      key = k;
+      value = v;
+    }
+  };
   typedef struct Var Var;
 
   class Utils {

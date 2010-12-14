@@ -30,46 +30,30 @@ int main () {
   string response;
 
   vector<Var> vars;
-  Var var;
-
+  
   try {
    
     // Twilio REST 
     Rest t (ACCOUNT_SID, ACCOUNT_TOKEN);
 
     // get completed calls XML
-    vars.clear();
-    var.key = "Status";
-    var.value = "completed";
-    vars.push_back(var);
+    vars.push_back(Var("Status", "Completed"));
     response = t.request("/" + API_VERSION + "/Accounts/" + ACCOUNT_SID + "/Calls", "GET", vars);
     cout << response << endl;
 
     // make a call
     vars.clear();
-    var.key = "To";
-    var.value = "xxx-xxx-xxxx";
-    vars.push_back(var);
-    var.key = "From";
-    var.value = "xxx-xxx-xxxx";
-    vars.push_back(var);
-    var.key = "Url";
-    var.value = "http://xxxx";
-    vars.push_back(var);
+    vars.push_back(Var("To", "xxx-xxx-xxxx"));
+    vars.push_back(Var("From", "xxx-xxx-xxxx"));
+    vars.push_back(Var("Url", "http://xxxx"));
     response = t.request("/" + API_VERSION + "/Accounts/" + ACCOUNT_SID + "/Calls", "POST", vars);
     cout << response << endl;
 
     // send SMS
     vars.clear();
-    var.key = "To";
-    var.value = "xxx-xxx-xxxx";
-    vars.push_back(var);
-    var.key = "From";
-    var.value = "xxx-xxx-xxxx";
-    vars.push_back(var);
-    var.key = "Body";
-    var.value = "Hello, how are you?";
-    vars.push_back(var);
+    vars.push_back(Var("To", "xxx-xxx-xxxx"));
+    vars.push_back(Var("From", "xxx-xxx-xxxx"));
+    vars.push_back(Var("Body", "Hello, how are you?"));
     response = t.request("/" + API_VERSION + "/Accounts/" + ACCOUNT_SID + "/SMS/Messages", "POST", vars);
     cout << response << endl;
 
@@ -99,12 +83,9 @@ int main () {
 
     // validate request signature 
     vars.clear();
-    var.key = "Status";
-    var.value = "completed";
-    vars.push_back(var);
-    bool v = u.validateRequest("mGgsPkZZfTGohCMY6yey2aWAAuU=", "/" + API_VERSION + "/Accounts/" + ACCOUNT_SID + "/Calls", vars);
+    vars.push_back(Var("Status", "Completed"));
+    bool v = u.validateRequest("x1P+eKchQZzgVQO3Yad/PgKSM1k=", "/" + API_VERSION + "/Accounts/" + ACCOUNT_SID + "/Calls", vars);
     cout << "request valid:" << v << endl;
-
   }
   catch(char const* str) {
     cout << "Exception raised: " << str << endl;
