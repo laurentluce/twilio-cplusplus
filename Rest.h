@@ -28,7 +28,7 @@ namespace twilio {
        * @param vars URL attributes or POST attributes
        * @return HTTP response
        */
-      string request(const string& path, string method, vector<Var>& vars);
+      string request(const string& path, const string& method, const vector<Var>& vars);
 
     private:
       /** Twilio account SID */
@@ -45,34 +45,34 @@ namespace twilio {
        * @param path URL path
        * @return full URL
        */
-      string build_uri(const string& path);
+      string build_uri(const string& path) const;
       /**
        * HTTP GET request
        * @param url HTTP request URL
        * @param vars URL attributes
        * @return HTTP response
        */
-      string get(string url, vector<Var>& vars);
+      string get(const string& url, const vector<Var>& vars);
       /**
        * HTTP POST request
        * @param url HTTP request URL
        * @param vars POST attributes
        * @return HTTP response
        */
-      string post(string url, vector<Var>& vars);
+      string post(const string& url, const vector<Var>& vars);
       /**
        * HTTP PUT request
        * @param url HTTP request URL
        * @param filename File to read data from
        * @return HTTP response
       */
-      string put(string url, const string& filename);
+      string put(const string& url, const string& filename);
       /**
        * HTTP DELETE request
        * @param url HTTP request URL
        * @return HTTP response
       */
-      string tdelete(string url);
+      string tdelete(const string& url);
 
   };
 

@@ -29,35 +29,37 @@ using namespace twilio;
  * @param vars URL attributes or POST attributes
  * @return HTTP response
  */
-string Rest::request(const string& path, string method, vector<Var>& vars)
+string Rest::request(const string& path, const string& method, const vector<Var>& vars)
 {
-  string response;
+  string response, m;
 
   if (path.length() <= 0)
     throw "Path is empty";
-    
-  transform(method.begin(), method.end(), method.begin(), ::toupper);
 
-  if ((method != "GET" && method != "POST"
-        && method != "PUT" && method != "DELETE"))
+  m = method;
+
+  transform(m.begin(), m.end(), m.begin(), ::toupper);
+
+  if ((m != "GET" && m != "POST"
+        && m != "PUT" && m != "DELETE"))
   {
-    throw "Invalid method parameter";
+    throw "Invalid m parameter";
   }
     
   string url = build_uri(path);
-  if(method == "GET")
+  if(m == "GET")
   {
     response = get(url, vars);
   }
-  else if(method == "POST")
+  else if(m == "POST")
   {
     response = post(url, vars);
   }
-  else if(method == "PUT")
+  else if(m == "PUT")
   {
     response = put(url, vars[0].value);
   }
-  else if(method == "DELETE")
+  else if(m == "DELETE")
   {
     response = tdelete(url);
   }
@@ -105,9 +107,10 @@ static size_t read_callback(void *ptr, size_t size, size_t nmemb, void *stream)
  * @param vars URL attributes or POST attributes
  * @return HTTP response
  */
-string Rest::get(string url, vector<Var>& vars)
+string Rest::get(const string& url, const vector<Var>& vars)
 {
   string query = "";
+  string u;
   
   for(unsigned int i = 0; i < vars.size(); i++)
   {
@@ -115,7 +118,7 @@ string Rest::get(string url, vector<Var>& vars)
   }
     
   if (query.length() > 0)
-    url = url + "?" + query.substr(1);
+    u = url + "?" + query.substr(1);
 
   CURL *curl;
   CURLcode res;
@@ -125,7 +128,7 @@ string Rest::get(string url, vector<Var>& vars)
   if(curl) {
     //url = curl_easy_escape(curl, url.c_str(), url.length());
     string sAuth = tid + ":" + ttoken;
-    curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+    curl_easy_setopt(curl, CURLOPT_URL, u.c_str());
     curl_easy_setopt(curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
     curl_easy_setopt(curl, CURLOPT_USERPWD, sAuth.c_str());
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writer);
@@ -146,7 +149,7 @@ string Rest::get(string url, vector<Var>& vars)
  * @param vars POST attributes
  * @return HTTP response
 */
-string Rest::post(string url, vector<Var>& vars)
+string Rest::post(const string& url, const vector<Var>& vars)
 {
   CURL *curl;
   CURLcode res;
@@ -200,20 +203,19 @@ string Rest::post(string url, vector<Var>& vars)
  * @param filename File to read data from
  * @return HTTP response
 */
-string Rest::put(string url, const string& filename)
+string Rest::put(const string& url, const string& filename)
 {
   CURL *curl;
   CURLcode res;
   FILE * hd_src ;
   int hd ;
   struct stat file_info;
-  char *file;
   
   // get local file size 
-  hd = open(file, O_RDONLY);
+  hd = open(filename.c_str(), O_RDONLY);
   fstat(hd, &file_info);
   close(hd);
-  hd_src = fopen(file, "rb");
+  hd_src = fopen(filename.c_str(), "rb");
 
   curl_global_init(CURL_GLOBAL_ALL);
 
@@ -250,7 +252,7 @@ string Rest::put(string url, const string& filename)
  * @param url HTTP request URL
  * @return HTTP response
 */
-string Rest::tdelete(string url)
+string Rest::tdelete(const string& url)
 {
   CURL *curl;
   CURLcode res;
@@ -280,7 +282,7 @@ string Rest::tdelete(string url)
  * @param path URL path
  * @return full URL
  */
-string Rest::build_uri(const string& path)
+string Rest::build_uri(const string& path) const
 {
   if (path[0] == '/')
     return TWILIO_API_URL + path;
