@@ -13,7 +13,9 @@
 #include <unistd.h>
 
 #include <curl/curl.h>
+#if LIBCURL_VERSION_NUM < 0x071507
 #include <curl/types.h>
+#endif
 #include <curl/easy.h>
 
 using namespace std;
