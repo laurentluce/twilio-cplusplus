@@ -13,7 +13,9 @@
 #include <unistd.h>
 
 #include <curl/curl.h>
+#if LIBCURL_VERSION_NUM < 0x071507
 #include <curl/types.h>
+#endif
 #include <curl/easy.h>
 
 using namespace std;
@@ -238,9 +240,10 @@ string Rest::put(const string& url, const string& filename)
     res = curl_easy_perform(curl);
     curl_easy_cleanup(curl);
     curl_global_cleanup();
-    fclose(hd_src);
-    if (res == CURLE_OK)
+    if (res == CURLE_OK) {
+      fclose(hd_src);
       return tbuffer;
+    }
   }
   
   fclose(hd_src);
